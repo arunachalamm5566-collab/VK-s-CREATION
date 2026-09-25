@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kaarigar AI — Digital Studio & Marketplace for Artisans</title>
+<meta name="description" content="Kaarigar AI turns a phone photo and a voice note into a ready listing, matches artisans with buyers, and creates cultural storytelling videos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --indigo-950:#1b2a4a;
+    --indigo-700:#3a5a86;
+    --turmeric-500:#e3a008;
+    --madder-600:#a83a2e;
+    --paper-100:#f1e9d8;
+    --paper-200:#e7dcc4;
+    --ink-900:#22190f;
+    --ink-600:#5a5040;
+    --serif: 'Fraunces', serif;
+    --sans: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:var(--sans);color:var(--ink-900);background:var(--paper-100);line-height:1.55;}
+  img,svg{display:block;max-width:100%;}
+  a{color:inherit;}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+  @media (max-width:640px){.wrap{padding:0 20px;}}
+
+  .stitch{border:none;border-top:2px dashed var(--indigo-700);opacity:.35;margin:0;}
+
+  header{position:sticky;top:0;z-index:40;background:rgba(241,233,216,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--paper-200);}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0;gap:16px;}
+  .brand{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-weight:600;font-size:22px;color:var(--indigo-950);text-decoration:none;}
+  .brand .mark{width:26px;height:26px;flex:none;}
+  .nav-links{display:flex;gap:26px;font-size:15px;font-weight:500;}
+  .nav-links a{text-decoration:none;color:var(--ink-600);}
+  .nav-links a:hover{color:var(--indigo-950);}
+  .btn{font-family:var(--sans);font-weight:600;font-size:15px;padding:11px 22px;border-radius:3px;border:none;cursor:pointer;transition:transform .15s ease;}
+  .btn:active{transform:translateY(1px);}
+  .btn-primary{background:var(--indigo-950);color:var(--paper-100);}
+  .btn-primary:hover{background:#243a63;}
+  .btn-ghost{background:transparent;color:var(--indigo-950);border:1.5px solid var(--indigo-950);}
+  .btn-accent{background:var(--madder-600);color:var(--paper-100);}
+  .btn-small{padding:8px 16px;font-size:13.5px;}
+  @media (max-width:980px){.nav-links{display:none;}}
+
+  .hero{padding:76px 0 90px;}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center;}
+  @media (max-width:900px){.hero-grid{grid-template-columns:1fr;gap:44px;}}
+  .eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.02em;color:var(--madder-600);margin:0 0 18px;}
+  h1.headline{font-family:var(--serif);font-weight:600;font-size:clamp(34px,5vw,54px);line-height:1.08;margin:0 0 22px;color:var(--indigo-950);}
+  h1.headline em{font-style:italic;font-weight:500;color:var(--madder-600);}
+  .lede{font-size:17.5px;color:var(--ink-600);max-width:46ch;margin:0 0 32px;}
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;}
+
+  .compare-card{background:var(--indigo-950);border-radius:6px;padding:20px;}
+  .compare-label-row{display:flex;justify-content:space-between;color:var(--paper-200);font-size:12.5px;font-family:var(--mono);margin-bottom:10px;}
+  .compare{position:relative;width:100%;aspect-ratio:4/3.4;border-radius:4px;overflow:hidden;background:#0f1930;}
+  .compare .layer{position:absolute;inset:0;}
+  .compare .after svg{width:100%;height:100%;}
+  .compare .before{clip-path:inset(0 48% 0 0);}
+  .compare .before svg{width:100%;height:100%;filter:grayscale(1) brightness(.72) contrast(.9);}
+  .compare .divider{position:absolute;top:0;bottom:0;left:52%;width:2px;background:var(--turmeric-500);pointer-events:none;}
+  .photo-fill{position:absolute;inset:0;background-size:cover;background-position:center;display:none;}
+  .before-photo{filter:brightness(.8) contrast(.88) saturate(.8);}
+  .after-photo{filter:brightness(1.06) contrast(1.12) saturate(1.25);}
+  .upload-row{margin-top:12px;display:flex;align-items:center;gap:10px;}
+  .upload-btn{font-family:var(--mono);font-size:12px;color:var(--turmeric-500);background:transparent;border:1px solid rgba(227,160,8,.5);border-radius:20px;padding:6px 14px;cursor:pointer;}
+  .upload-btn:hover{background:rgba(227,160,8,.12);}
+  .upload-hint{font-size:11.5px;color:#8f9ab3;}
+  .slider-row{margin-top:14px;}
+  input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:3px;background:var(--paper-200);border-radius:2px;outline:none;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--turmeric-500);border:3px solid var(--indigo-950);cursor:pointer;}
+  .compare-caption{color:var(--paper-200);font-size:12.5px;margin-top:12px;}
+
+  .problem{background:var(--indigo-950);color:var(--paper-100);padding:52px 0;}
+  .problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:36px;}
+  @media (max-width:760px){.problem-grid{grid-template-columns:1fr;}}
+  .stat{font-family:var(--serif);font-size:40px;font-weight:600;color:var(--turmeric-500);margin:0 0 6px;}
+  .stat-body{font-size:14.5px;color:#cfd7e6;max-width:32ch;}
+
+  .section-head{max-width:640px;margin:0 auto 54px;}
+  .section-head h2{font-family:var(--serif);font-weight:600;font-size:clamp(28px,3.4vw,38px);color:var(--indigo-950);margin:0 0 14px;}
+  .section-head p{color:var(--ink-600);font-size:16px;margin:0;}
+  .center{text-align:center;margin-left:auto;margin-right:auto;}
+
+  .features{padding:96px 0;}
+  .feature-row{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center;padding:56px 0;}
+  .feature-row.reverse{grid-template-columns:1.1fr .9fr;}
+  .feature-row.reverse .feature-text{order:2;}
+  @media (max-width:860px){
+    .feature-row,.feature-row.reverse{grid-template-columns:1fr;}
+    .feature-row.reverse .feature-text{order:0;}
+  }
+  .feature-tag{font-family:var(--mono);font-size:12.5px;color:var(--madder-600);margin-bottom:10px;}
+  .feature-text h3{font-family:var(--serif);font-weight:600;font-size:27px;color:var(--indigo-950);margin:0 0 12px;}
+  .feature-text p{color:var(--ink-600);font-size:15.5px;max-width:42ch;margin:0 0 4px;}
+
+  .demo-card{background:var(--paper-100);border:2px dashed var(--indigo-700);border-radius:6px;padding:24px;}
+  .demo-card h4{margin:0 0 4px;font-size:12.5px;font-family:var(--mono);color:var(--indigo-700);font-weight:500;}
+
+  label.field-label{display:block;font-size:13px;color:var(--ink-600);margin:14px 0 6px;}
+  label.field-label:first-of-type{margin-top:4px;}
+  input[type=text],input[type=number],input[type=email],textarea,select{
+    width:100%;font-family:var(--sans);font-size:14.5px;padding:10px 12px;
+    border:1px solid var(--paper-200);border-radius:4px;background:#fff;color:var(--ink-900);
+  }
+  textarea{resize:vertical;min-height:64px;}
+  .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  @media (max-width:520px){.field-row{grid-template-columns:1fr;}}
+
+  .output-box{margin-top:16px;background:#fff;border-left:3px solid var(--turmeric-500);padding:14px 16px;border-radius:0 4px 4px 0;font-size:14px;display:none;}
+  .output-box.show{display:block;}
+  .output-box .lbl{font-family:var(--mono);font-size:11.5px;color:var(--indigo-700);display:block;margin-bottom:3px;}
+  .output-box .val{color:var(--ink-900);margin:0 0 10px;}
+  .output-box .val:last-child{margin-bottom:0;}
+  .tag-chip{display:inline-block;background:var(--paper-200);color:var(--indigo-950);font-size:12px;padding:3px 10px;border-radius:20px;margin:2px 4px 0 0;}
+
+  .chart-wrap{width:100%;height:170px;}
+  .chart-wrap svg{width:100%;height:100%;}
+
+  .buyer-card{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--paper-200);font-size:14px;gap:12px;}
+  .buyer-card:last-child{border-bottom:none;}
+  .buyer-name{font-weight:600;color:var(--indigo-950);}
+  .buyer-meta{color:var(--ink-600);font-size:12.5px;}
+  .match-pct{font-family:var(--mono);color:var(--madder-600);font-weight:500;}
+
+  /* ---------- voice assistant ---------- */
+  .mic-row{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap;}
+  .mic-btn{
+    width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;flex:none;
+    background:var(--madder-600);color:var(--paper-100);display:flex;align-items:center;justify-content:center;
+  }
+  .mic-btn svg{width:22px;height:22px;}
+  .mic-btn.listening{animation:pulse 1.2s infinite;background:var(--turmeric-500);color:var(--indigo-950);}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(227,160,8,.55);}70%{box-shadow:0 0 0 14px rgba(227,160,8,0);}100%{box-shadow:0 0 0 0 rgba(227,160,8,0);}}
+  .mic-status{font-family:var(--mono);font-size:12px;color:var(--ink-600);}
+
+  /* ---------- roles: buyer & seller ---------- */
+  .roles{padding:90px 0;background:var(--paper-200);}
+  .role-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;}
+  @media (max-width:860px){.role-grid{grid-template-columns:1fr;}}
+  .role-card{background:var(--paper-100);border-radius:6px;padding:30px;border-top:5px solid var(--indigo-950);}
+  .role-card.buyer{border-top-color:var(--madder-600);}
+  .role-card h3{font-family:var(--serif);font-size:24px;margin:0 0 6px;color:var(--indigo-950);}
+  .role-card .role-sub{font-family:var(--mono);font-size:12px;color:var(--madder-600);margin:0 0 18px;}
+  .steps{list-style:none;padding:0;margin:0 0 22px;counter-reset:step;}
+  .steps li{counter-increment:step;position:relative;padding:0 0 14px 40px;font-size:14.5px;color:var(--ink-600);}
+  .steps li::before{
+    content:counter(step);position:absolute;left:0;top:0;width:26px;height:26px;border-radius:50%;
+    background:var(--indigo-950);color:var(--paper-100);font-family:var(--mono);font-size:12.5px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .role-card.buyer .steps li::before{background:var(--madder-600);}
+  .steps li b{color:var(--indigo-950);display:block;font-weight:600;}
+
+  .profile{background:#fff;border-radius:4px;padding:16px;margin-top:18px;font-size:13.5px;}
+  .profile .p-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+  .avatar{width:44px;height:44px;border-radius:50%;background:var(--indigo-700);color:var(--paper-100);font-family:var(--serif);font-size:18px;display:flex;align-items:center;justify-content:center;flex:none;}
+  .role-card.buyer .avatar{background:var(--madder-600);}
+  .p-head .p-title{font-weight:600;color:var(--indigo-950);}
+  .p-head .p-sub{font-size:12.5px;color:var(--ink-600);}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;}
+  .kv dt{font-family:var(--mono);font-size:11.5px;color:var(--indigo-700);}
+  .kv dd{margin:0;color:var(--ink-900);}
+  .badge{display:inline-block;background:var(--paper-200);border-radius:20px;padding:2px 10px;font-size:11.5px;margin:2px 4px 0 0;}
+  .verified{color:#1e6b3a;font-family:var(--mono);font-size:11.5px;}
+
+  /* ---------- video studio ---------- */
+  .videostudio{padding:90px 0;}
+  .vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:start;}
+  @media (max-width:900px){.vs-grid{grid-template-columns:1fr;}}
+  .reel{background:var(--indigo-950);border-radius:8px;padding:18px;}
+  .reel-frame{position:relative;aspect-ratio:9/16;max-height:520px;margin:0 auto;border-radius:6px;overflow:hidden;background:#0f1930;}
+  .reel-scene{position:absolute;inset:0;opacity:0;transition:opacity .6s ease;display:flex;flex-direction:column;justify-content:flex-end;padding:22px;}
+  .reel-scene.active{opacity:1;}
+  .reel-scene .scene-art{position:absolute;inset:0;}
+  .reel-scene .scene-art svg{width:100%;height:100%;}
+  .reel-caption{position:relative;color:var(--paper-100);font-family:var(--serif);font-size:19px;line-height:1.3;text-shadow:0 2px 14px rgba(0,0,0,.6);}
+  .reel-kicker{position:relative;font-family:var(--mono);font-size:11px;color:var(--turmeric-500);margin-bottom:6px;}
+  .reel-bar{height:3px;background:rgba(241,233,216,.2);border-radius:2px;margin-top:14px;overflow:hidden;}
+  .reel-bar span{display:block;height:100%;width:0;background:var(--turmeric-500);}
+  .reel-meta{display:flex;justify-content:space-between;color:#8f9ab3;font-family:var(--mono);font-size:11.5px;margin-top:10px;}
+  .storyboard{margin-top:16px;display:none;}
+  .storyboard.show{display:block;}
+  .shot{display:grid;grid-template-columns:52px 1fr;gap:12px;padding:10px 0;border-bottom:1px solid var(--paper-200);font-size:13.5px;}
+  .shot:last-child{border-bottom:none;}
+  .shot .t{font-family:var(--mono);font-size:11.5px;color:var(--madder-600);}
+  .shot b{display:block;color:var(--indigo-950);}
+  .shot span{color:var(--ink-600);}
+
+  .market{padding:90px 0;background:var(--paper-200);}
+  .market-toolbar{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;}
+  .market-toolbar select,.market-toolbar input{max-width:220px;}
+  .market-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:34px;}
+  @media (max-width:900px){.market-grid{grid-template-columns:repeat(2,1fr);}}
+  .product-card{background:var(--paper-100);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;}
+  .product-thumb{aspect-ratio:1/1;background:linear-gradient(135deg,var(--indigo-700),var(--indigo-950));display:flex;align-items:center;justify-content:center;}
+  .product-thumb svg{width:58%;height:58%;}
+  .product-info{padding:14px 16px 18px;display:flex;flex-direction:column;gap:4px;flex:1;}
+  .product-info .p-name{font-weight:600;font-size:14.5px;margin:0;color:var(--indigo-950);}
+  .product-info .p-region{font-size:12px;color:var(--ink-600);margin:0;}
+  .product-info .p-seller{font-size:12px;color:var(--indigo-700);margin:0;}
+  .product-info .p-price{font-family:var(--mono);font-size:14px;color:var(--madder-600);margin:2px 0 10px;}
+  .product-info .btn{margin-top:auto;}
+
+  .cart-bar{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--indigo-950);color:var(--paper-100);
+    display:none;align-items:center;justify-content:space-between;gap:16px;padding:14px 32px;font-size:14px;
+  }
+  .cart-bar.show{display:flex;}
+  .cart-bar .c-total{font-family:var(--mono);color:var(--turmeric-500);}
+
+  .outcomes{padding:90px 0;}
+  .outcome-list{display:grid;grid-template-columns:1fr 1fr;gap:34px 48px;}
+  @media (max-width:760px){.outcome-list{grid-template-columns:1fr;}}
+  .outcome-item{display:flex;gap:16px;}
+  .outcome-icon{flex:none;width:38px;height:38px;color:var(--madder-600);}
+  .outcome-item h4{margin:0 0 6px;font-family:var(--serif);font-weight:600;font-size:18px;color:var(--indigo-950);}
+  .outcome-item p{margin:0;color:var(--ink-600);font-size:14.5px;}
+
+  footer{background:var(--indigo-950);color:var(--paper-100);padding:70px 0 40px;}
+  .cta-block{text-align:center;max-width:560px;margin:0 auto 50px;}
+  .cta-block h2{font-family:var(--serif);font-size:32px;font-weight:600;margin:0 0 16px;}
+  .cta-block p{color:#c6cee0;margin:0 0 28px;}
+  .foot-bottom{display:flex;justify-content:space-between;color:#8f9ab3;font-size:13px;border-top:1px solid #2c3d61;padding-top:24px;}
+  @media (max-width:600px){.foot-bottom{flex-direction:column;gap:8px;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#top" class="brand">
+      <svg class="mark" viewBox="0 0 26 26" fill="none"><circle cx="13" cy="13" r="12" stroke="currentColor" stroke-width="1.6"/><path d="M13 5v16M5 13h16" stroke="currentColor" stroke-width="1.2" opacity=".5"/><circle cx="13" cy="13" r="4" fill="currentColor"/></svg>
+      Kaarigar AI
+    </a>
+    <nav class="nav-links">
+      <a href="#studio">Product studio</a>
+      <a href="#voice">Voice assistant</a>
+      <a href="#video">Story video</a>
+      <a href="#roles">Sell &amp; buy</a>
+      <a href="#buyers">Buyer matching</a>
+      <a href="#market">Marketplace</a>
+    </nav>
+    <button class="btn btn-primary btn-small" onclick="document.getElementById('roles').scrollIntoView({behavior:'smooth'})">Sell or buy</button>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Built for India's artisan clusters</p>
+      <h1 class="headline">One photo in. <em>A ready storefront</em> out.</h1>
+      <p class="lede">Kaarigar AI turns a phone photo and a spoken note into a professional listing — priced, catalogued, translated, filmed as a short cultural story, and matched to the right buyer. No camera, no English, no middleman required.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-primary" onclick="document.getElementById('photoUpload').click()">Try the product studio</button>
+        <button class="btn btn-accent" onclick="document.getElementById('voice').scrollIntoView({behavior:'smooth'})">Speak to the assistant</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('roles').scrollIntoView({behavior:'smooth'})">How selling &amp; buying works</button>
+      </div>
+    </div>
+    <div class="compare-card">
+      <div class="compare-label-row"><span>PHONE PHOTO</span><span>AI PRODUCT STUDIO</span></div>
+      <div class="compare" id="compareWidget">
+        <div class="layer after" id="afterLayer">
+          <div class="photo-fill after-photo" id="afterPhoto"></div>
+          <svg id="afterSvg" viewBox="0 0 400 340" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="bgGrad" cx="50%" cy="35%" r="75%">
+                <stop offset="0%" stop-color="#f6ecd8"/>
+                <stop offset="100%" stop-color="#e2cf9e"/>
+              </radialGradient>
+              <linearGradient id="potGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#c9622f"/>
+                <stop offset="55%" stop-color="#a8471f"/>
+                <stop offset="100%" stop-color="#7e3417"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="340" fill="url(#bgGrad)"/>
+            <ellipse cx="200" cy="292" rx="120" ry="14" fill="#000" opacity=".12"/>
+            <path d="M155 120 C150 100 250 100 245 120 L258 230 C260 260 140 260 142 230 Z" fill="url(#potGrad)"/>
+            <path d="M150 118 C150 108 250 108 250 118 C250 128 150 128 150 118 Z" fill="#d97a3f"/>
+            <path d="M165 150 Q200 165 235 150" stroke="#e3a008" stroke-width="4" fill="none" opacity=".85"/>
+            <path d="M160 190 Q200 208 240 190" stroke="#e3a008" stroke-width="4" fill="none" opacity=".7"/>
+            <ellipse cx="180" cy="150" rx="10" ry="26" fill="#fff" opacity=".14"/>
+          </svg>
+        </div>
+        <div class="layer before" id="beforeLayer">
+          <div class="photo-fill before-photo" id="beforePhoto"></div>
+          <svg id="beforeSvg" viewBox="0 0 400 340" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="340" fill="#cfc9bb"/>
+            <ellipse cx="200" cy="292" rx="120" ry="14" fill="#000" opacity=".12"/>
+            <path d="M155 120 C150 100 250 100 245 120 L258 230 C260 260 140 260 142 230 Z" fill="#8a8375"/>
+            <path d="M150 118 C150 108 250 108 250 118 C250 128 150 128 150 118 Z" fill="#9b9384"/>
+          </svg>
+        </div>
+        <div class="divider" id="compareDivider"></div>
+      </div>
+      <div class="slider-row">
+        <input type="range" min="0" max="100" value="52" id="compareSlider">
+      </div>
+      <p class="compare-caption">Drag to compare — same photo, studio-graded by AI in under 4 seconds.</p>
+      <div class="upload-row">
+        <button class="upload-btn" type="button" onclick="document.getElementById('photoUpload').click()">Try with your own photo</button>
+        <span class="upload-hint" id="uploadHint">optional — stays on this device</span>
+      </div>
+      <input type="file" id="photoUpload" accept="image/*" style="display:none;">
+    </div>
+  </div>
+</section>
+
+<section class="problem">
+  <div class="wrap problem-grid">
+    <div>
+      <p class="stat">2×/yr</p>
+      <p class="stat-body">is often the only sales window for artisans who rely on exhibitions and melas to reach buyers.</p>
+    </div>
+    <div>
+      <p class="stat">0 studios</p>
+      <p class="stat-body">Most craft clusters have no access to product photography, cataloguing, or pricing support.</p>
+    </div>
+    <div>
+      <p class="stat">1 voice note</p>
+      <p class="stat-body">is all Kaarigar needs — in the artisan's own language — to build a complete listing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SELL & BUY : ROLES ============ -->
+<section class="roles" id="roles">
+  <div class="wrap">
+    <div class="section-head center">
+      <h2>How selling and buying works</h2>
+      <p>Two sides, one marketplace. Artisans list with their voice; buyers search, sample, and place bulk or retail orders with escrow-protected payment.</p>
+    </div>
+    <div class="role-grid">
+
+      <div class="role-card seller" id="seller">
+        <h3>For the artisan (seller)</h3>
+        <p class="role-sub">SELLER JOURNEY — 5 STEPS</p>
+        <ol class="steps">
+          <li><b>Create the seller profile</b>Name, cluster, craft, languages, bank/UPI and Aadhaar-based verification.</li>
+          <li><b>Photograph and speak</b>One phone photo plus a spoken note in any Indian language — the AI writes the listing.</li>
+          <li><b>Confirm the AI price</b>Material cost and hours in, a fair market range out; the artisan accepts or edits it.</li>
+          <li><b>Publish with a story video</b>The cultural story reel is attached to the listing and shared to social channels.</li>
+          <li><b>Accept orders, ship, get paid</b>Buyer pays into escrow; payment releases to the artisan's UPI on delivery.</li>
+        </ol>
+        <div class="profile">
+          <div class="p-head">
+            <div class="avatar">LB</div>
+            <div>
+              <div class="p-title">Lakshmi Ben Rabari <span class="verified">✓ verified</span></div>
+              <div class="p-sub">Bhuj, Kutch · Bandhani &amp; hand-weaving</div>
+            </div>
+          </div>
+          <dl class="kv">
+            <dt>SELLER ID</dt><dd>KA-SLR-10482</dd>
+            <dt>CLUSTER</dt><dd>Kutch Weavers Co-operative (24 members)</dd>
+            <dt>LANGUAGES</dt><dd>Kutchi, Gujarati, Hindi</dd>
+            <dt>CAPACITY</dt><dd>40–120 pieces / month · 12 day lead time</dd>
+            <dt>RATING</dt><dd>4.8 / 5 · 63 orders fulfilled</dd>
+            <dt>PAYOUT</dt><dd>UPI · escrow release on delivery</dd>
+          </dl>
+          <div style="margin-top:10px;">
+            <span class="badge">GI-tagged craft</span><span class="badge">Natural dyes</span><span class="badge">Bulk ready</span>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-small" style="margin-top:18px;" onclick="document.getElementById('voice').scrollIntoView({behavior:'smooth'})">Start a listing by voice</button>
+      </div>
+
+      <div class="role-card buyer" id="buyer">
+        <h3>For the buyer</h3>
+        <p class="role-sub">BUYER JOURNEY — 5 STEPS</p>
+        <ol class="steps">
+          <li><b>Create the buyer profile</b>Boutique, exporter, or retail shopper — with GST details for B2B accounts.</li>
+          <li><b>Search or get matched</b>Filter by craft, region, price and quantity, or let AI matching surface the right artisans.</li>
+          <li><b>Request a sample or quote</b>Chat is auto-translated both ways, so language is never a barrier.</li>
+          <li><b>Place the order</b>Retail checkout or a bulk purchase order with agreed lead time and delivery date.</li>
+          <li><b>Pay into escrow, receive, release</b>Funds are held until delivery is confirmed — protection for both sides.</li>
+        </ol>
+        <div class="profile">
+          <div class="p-head">
+            <div class="avatar">AC</div>
+            <div>
+              <div class="p-title">Anokhi Retail Collective <span class="verified">✓ GST verified</span></div>
+              <div class="p-sub">Jaipur · boutique chain, 9 stores</div>
+            </div>
+          </div>
+          <dl class="kv">
+            <dt>BUYER ID</dt><dd>KA-BYR-3391</dd>
+            <dt>TYPE</dt><dd>B2B boutique retailer</dd>
+            <dt>BUYS</dt><dd>Textiles, natural-dye home linen</dd>
+            <dt>ORDER SIZE</dt><dd>50–500 units per order</dd>
+            <dt>BUDGET</dt><dd>₹600 – ₹2,500 per piece</dd>
+            <dt>TERMS</dt><dd>Escrow · 30% advance · 20 day delivery</dd>
+          </dl>
+          <div style="margin-top:10px;">
+            <span class="badge">Repeat buyer</span><span class="badge">Pan-India shipping</span><span class="badge">Fair-trade pledge</span>
+          </div>
+        </div>
+        <button class="btn btn-accent btn-small" style="margin-top:18px;" onclick="document.getElementById('market').scrollIntoView({behavior:'smooth'})">Browse the marketplace</button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div class="wrap">
+    <div class="section-head center">
+      <h2>The AI tools behind every listing</h2>
+      <p>Each step runs on-device or in the cloud, chained together so an artisan never has to touch a spreadsheet, a translator, or a camera studio.</p>
+    </div>
+
+    <!-- VOICE ASSISTANT -->
+    <div class="feature-row" id="voice">
+      <div class="feature-text">
+        <p class="feature-tag">VOICE ASSISTANT · MULTILINGUAL CATALOGER</p>
+        <h3>Speak in your language — the listing writes itself</h3>
+        <p>Tap the mic and describe the piece in Tamil, Kutchi, Bhojpuri or Bengali. Speech is transcribed live, and the AI turns it into a title, description, and search tags in the buyer's language. The assistant can also read the result back aloud.</p>
+      </div>
+      <div class="demo-card">
+        <h4>DEMO — VOICE TO LISTING</h4>
+        <label class="field-label">Speaking language</label>
+        <select id="voiceLang">
+          <option value="hi-IN">हिन्दी — Hindi</option>
+          <option value="gu-IN">ગુજરાતી — Gujarati</option>
+          <option value="ta-IN">தமிழ் — Tamil</option>
+          <option value="bn-IN">বাংলা — Bengali</option>
+          <option value="mr-IN">मराठी — Marathi</option>
+          <option value="en-IN">English (India)</option>
+        </select>
+        <div class="mic-row">
+          <button class="mic-btn" id="micBtn" title="Hold a conversation with the assistant">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3" stroke-linecap="round"/></svg>
+          </button>
+          <span class="mic-status" id="micStatus">Tap the mic and describe your product</span>
+        </div>
+        <label class="field-label">Transcript (edit if needed)</label>
+        <textarea id="catInput" placeholder="e.g. hand-woven cotton stole, indigo dye, made in Bhuj, takes three days to weave">hand-woven cotton stole, indigo dye, made in Bhuj, takes three days to weave</textarea>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+          <button class="btn btn-primary btn-small" onclick="generateCatalog()">Generate listing</button>
+          <button class="btn btn-ghost btn-small" onclick="speakListing()">🔊 Read it back</button>
+        </div>
+        <div class="output-box" id="catOutput">
+          <span class="lbl">TITLE</span>
+          <p class="val" id="catTitle"></p>
+          <span class="lbl">DESCRIPTION</span>
+          <p class="val" id="catDesc"></p>
+          <span class="lbl">TAGS</span>
+          <p class="val" id="catTags"></p>
+        </div>
+      </div>
+    </div>
+    <hr class="stitch">
+
+    <!-- PRODUCT STUDIO -->
+    <div class="feature-row reverse" id="studio">
+      <div class="feature-text">
+        <p class="feature-tag">AI PRODUCT STUDIO</p>
+        <h3>Turns a phone photo into a catalogue-ready image</h3>
+        <p>Backgrounds are cleaned, lighting corrected, and shadows added automatically — the same photo an artisan takes on a doorstep becomes a listing-ready product shot.</p>
+      </div>
+      <div class="demo-card">
+        <h4>DEMO</h4>
+        <p style="margin:0 0 10px;">Use the slider in the hero above to compare a raw photo against the studio output — that's this tool running live.</p>
+        <button class="btn btn-ghost btn-small" onclick="document.getElementById('photoUpload').click()">Upload a photo</button>
+      </div>
+    </div>
+    <hr class="stitch">
+
+    <!-- PRICING -->
+    <div class="feature-row" id="pricing">
+      <div class="feature-text">
+        <p class="feature-tag">SMART PRICING ASSISTANT</p>
+        <h3>Suggests a fair, market-aware price</h3>
+        <p>Enter material cost and hours worked — Kaarigar weighs it against current demand for the craft category and suggests a price range that protects the artisan's margin.</p>
+      </div>
+      <div class="demo-card">
+        <h4>DEMO</h4>
+        <div class="field-row">
+          <div>
+            <label class="field-label">Material cost (₹)</label>
+            <input type="number" id="priceCost" value="450">
+          </div>
+          <div>
+            <label class="field-label">Hours worked</label>
+            <input type="number" id="priceHours" value="9">
+          </div>
+        </div>
+        <label class="field-label">Craft category</label>
+        <select id="priceCategory">
+          <option value="1.35">Textile &amp; weaving</option>
+          <option value="1.5">Pottery &amp; ceramics</option>
+          <option value="1.65">Metal &amp; jewellery</option>
+        </select>
+        <button class="btn btn-primary btn-small" style="margin-top:12px;" onclick="suggestPrice()">Suggest price</button>
+        <div class="output-box" id="priceOutput">
+          <span class="lbl">SUGGESTED RANGE</span>
+          <p class="val" id="priceRange" style="font-family:var(--mono);font-size:18px;"></p>
+          <span class="lbl">WHY</span>
+          <p class="val" id="priceWhy"></p>
+        </div>
+      </div>
+    </div>
+    <hr class="stitch">
+
+    <!-- DEMAND -->
+    <div class="feature-row reverse">
+      <div class="feature-text">
+        <p class="feature-tag">AI DEMAND PREDICTOR</p>
+        <h3>Predicts trending and seasonal demand</h3>
+        <p>Kaarigar tracks search and order patterns across categories so artisans know what to stock up on before the season — and before an exhibition — rather than after.</p>
+      </div>
+      <div class="demo-card">
+        <h4>DEMO — projected demand, terracotta home decor</h4>
+        <div class="chart-wrap">
+          <svg viewBox="0 0 400 170" preserveAspectRatio="none">
+            <polyline points="0,130 40,120 80,110 120,115 160,95 200,60 240,30 280,20 320,55 360,90 400,110" fill="none" stroke="#a83a2e" stroke-width="3"/>
+            <polyline points="0,130 40,120 80,110 120,115 160,95 200,60 240,30 280,20 320,55 360,90 400,110 400,170 0,170" fill="#e3a008" opacity=".12" stroke="none"/>
+            <line x1="240" y1="0" x2="240" y2="170" stroke="#e3a008" stroke-width="1" stroke-dasharray="4 4"/>
+            <text x="244" y="16" font-family="IBM Plex Mono" font-size="11" fill="#a83a2e">Diwali peak</text>
+          </svg>
+        </div>
+        <p style="font-size:12.5px;color:var(--ink-600);margin:6px 0 0;">Jan – Nov, relative order volume</p>
+      </div>
+    </div>
+    <hr class="stitch">
+
+    <!-- BUYER MATCHING -->
+    <div class="feature-row" id="buyers">
+      <div class="feature-text">
+        <p class="feature-tag">AI BUYER MATCHING</p>
+        <h3>Finds suitable B2B buyers automatically</h3>
+        <p>Matching runs on price, quantity, and category fit — so a small workshop is shown to boutique buyers, not only to the largest wholesalers it can't yet fulfil.</p>
+      </div>
+      <div class="demo-card">
+        <h4>DEMO</h4>
+        <div class="field-row">
+          <div>
+            <label class="field-label">Category</label>
+            <select id="matchCategory">
+              <option>Textiles</option>
+              <option>Pottery</option>
+              <option>Jewellery</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label">Order quantity</label>
+            <input type="number" id="matchQty" value="120">
+          </div>
+        </div>
+        <button class="btn btn-primary btn-small" style="margin-top:12px;" onclick="matchBuyers()">Find buyers</button>
+        <div class="output-box" id="matchOutput"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CULTURAL STORY VIDEO STUDIO ============ -->
+<section class="videostudio" id="video">
+  <div class="wrap">
+    <div class="section-head center">
+      <h2>AI cultural storytelling video</h2>
+      <p>Describe the craft, pick a mood and a language — Kaarigar writes the script, builds a shot-by-shot storyboard, narrates it aloud and plays a vertical reel ready for Instagram, WhatsApp, or the listing page.</p>
+    </div>
+    <div class="vs-grid">
+      <div class="demo-card">
+        <h4>AI VIDEO MAKER</h4>
+        <div class="field-row">
+          <div>
+            <label class="field-label">Craft</label>
+            <input type="text" id="storyCraft" value="Bandhani tie-dye">
+          </div>
+          <div>
+            <label class="field-label">Region</label>
+            <input type="text" id="storyRegion" value="Kutch, Gujarat">
+          </div>
+        </div>
+        <div class="field-row">
+          <div>
+            <label class="field-label">Artisan name</label>
+            <input type="text" id="storyArtisan" value="Lakshmi Ben">
+          </div>
+          <div>
+            <label class="field-label">Length</label>
+            <select id="storyLength">
+              <option value="15">15 seconds — reel</option>
+              <option value="30" selected>30 seconds — story</option>
+              <option value="60">60 seconds — full film</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row">
+          <div>
+            <label class="field-label">Mood</label>
+            <select id="storyMood">
+              <option value="heritage">Heritage &amp; slow craft</option>
+              <option value="festive">Festive &amp; vibrant</option>
+              <option value="minimal">Modern &amp; minimal</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label">Narration language</label>
+            <select id="storyVoiceLang">
+              <option value="en-IN">English (India)</option>
+              <option value="hi-IN">हिन्दी — Hindi</option>
+              <option value="gu-IN">ગુજરાતી — Gujarati</option>
+              <option value="ta-IN">தமிழ் — Tamil</option>
+            </select>
+          </div>
+        </div>
+        <label class="field-label">Anything special to mention (optional)</label>
+        <textarea id="storyNote" placeholder="e.g. natural indigo, three generations of the family, 3 days per piece"></textarea>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;">
+          <button class="btn btn-accent btn-small" onclick="generateVideo()">Generate story video</button>
+          <button class="btn btn-ghost btn-small" onclick="narrateStory()">🔊 Play narration</button>
+        </div>
+        <div class="output-box" id="storyOutput">
+          <span class="lbl">AI SCRIPT / CAPTION</span>
+          <p class="val" id="storyText"></p>
+          <span class="lbl">SUGGESTED HASHTAGS</span>
+          <p class="val" id="storyTags"></p>
+        </div>
+        <div class="storyboard" id="storyboard">
+          <span class="lbl" style="font-family:var(--mono);font-size:11.5px;color:var(--indigo-700);">SHOT LIST</span>
+          <div id="shotList"></div>
+        </div>
+      </div>
+
+      <div class="reel">
+        <div class="reel-frame" id="reelFrame">
+          <div class="reel-scene active" data-scene="0">
+            <div class="scene-art">
+              <svg viewBox="0 0 270 480" preserveAspectRatio="xMidYMid slice">
+                <defs><linearGradient id="s0" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3a5a86"/><stop offset="100%" stop-color="#1b2a4a"/></linearGradient></defs>
+                <rect width="270" height="480" fill="url(#s0)"/>
+                <circle cx="135" cy="200" r="70" fill="#e3a008" opacity=".25"/>
+                <path d="M55 300 Q135 250 215 300 L215 360 Q135 320 55 360 Z" fill="#a83a2e" opacity=".55"/>
+              </svg>
+            </div>
+            <p class="reel-kicker">PREVIEW</p>
+            <p class="reel-caption">Your cultural story reel appears here.</p>
+          </div>
+        </div>
+        <div class="reel-bar"><span id="reelProgress"></span></div>
+        <div class="reel-meta"><span id="reelLabel">9:16 · ready for Instagram &amp; WhatsApp</span><span id="reelTime">0s</span></div>
+        <div style="display:flex;gap:10px;margin-top:14px;">
+          <button class="btn btn-primary btn-small" onclick="playReel()">▶ Play reel</button>
+          <button class="btn btn-ghost btn-small" style="color:var(--paper-100);border-color:var(--paper-200);" onclick="downloadScript()">Download script</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MARKETPLACE ============ -->
+<section class="market" id="market">
+  <div class="wrap">
+    <div class="section-head center">
+      <h2>Marketplace — buy directly from the maker</h2>
+      <p>Every finished listing flows straight into the marketplace. Retail shoppers check out instantly; B2B buyers request bulk quotes. Payment is held in escrow until delivery.</p>
+    </div>
+    <div class="market-toolbar">
+      <select id="filterCat" onchange="renderMarket()">
+        <option value="all">All crafts</option>
+        <option>Pottery</option>
+        <option>Textiles</option>
+        <option>Jewellery</option>
+        <option>Decor</option>
+      </select>
+      <select id="filterSort" onchange="renderMarket()">
+        <option value="pop">Sort: most popular</option>
+        <option value="low">Price: low to high</option>
+        <option value="high">Price: high to low</option>
+      </select>
+      <input type="text" id="filterQ" placeholder="Search craft or region" oninput="renderMarket()">
+    </div>
+    <div class="market-grid" id="marketGrid"></div>
+  </div>
+</section>
+
+<section class="outcomes">
+  <div class="wrap">
+    <div class="section-head center">
+      <h2>What changes for the artisan</h2>
+    </div>
+    <div class="outcome-list">
+      <div class="outcome-item">
+        <svg class="outcome-icon" viewBox="0 0 24 24" fill="none"><path d="M4 16l5-6 4 4 7-9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div><h4>Sells online without photography or cataloguing skills</h4><p>The product studio and cataloguer handle both, from a single phone photo and voice note.</p></div>
+      </div>
+      <div class="outcome-item">
+        <svg class="outcome-icon" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <div><h4>Works in the artisan's own language</h4><p>Voice input and regional-language support remove the digital and literacy barriers that keep artisans offline.</p></div>
+      </div>
+      <div class="outcome-item">
+        <svg class="outcome-icon" viewBox="0 0 24 24" fill="none"><path d="M12 3v18M6 8h12M6 16h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <div><h4>Prices with confidence</h4><p>AI-based pricing reduces the guesswork that leads artisans to under-price their own work.</p></div>
+      </div>
+      <div class="outcome-item">
+        <svg class="outcome-icon" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M8 12l3 3 5-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div><h4>Sells all year, not twice a year</h4><p>Story videos and marketplace reach extend sales far beyond exhibitions and melas.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="cta-block">
+      <h2>Bring your craft online</h2>
+      <p>Upload one photo and speak one note — Kaarigar builds the listing, the price, the story video, and finds the buyer.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="document.getElementById('seller').scrollIntoView({behavior:'smooth'})">Join as an artisan</button>
+        <button class="btn btn-accent" onclick="document.getElementById('buyer').scrollIntoView({behavior:'smooth'})">Join as a buyer</button>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>Kaarigar AI — prototype build</span>
+      <span>Made for artisan clusters across India</span>
+    </div>
+  </div>
+</footer>
+
+<div class="cart-bar" id="cartBar">
+  <span id="cartText">0 items in cart</span>
+  <span class="c-total" id="cartTotal">₹0</span>
+  <button class="btn btn-accent btn-small" onclick="checkout()">Checkout with escrow</button>
+</div>
+
+<script>
+  /* ---------- before/after compare ---------- */
+  const slider = document.getElementById('compareSlider');
+  const before = document.getElementById('beforeLayer');
+  const divider = document.getElementById('compareDivider');
+  function setCompare(val){
+    before.style.clipPath = `inset(0 ${100 - val}% 0 0)`;
+    divider.style.left = val + '%';
+  }
+  slider.addEventListener('input', e => setCompare(e.target.value));
+  setCompare(slider.value);
+
+  /* ---------- photo upload ---------- */
+  const photoInput = document.getElementById('photoUpload');
+  photoInput.addEventListener('change', e => {
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    const url = URL.createObjectURL(file);
+    document.getElementById('afterPhoto').style.backgroundImage = `url(${url})`;
+    document.getElementById('beforePhoto').style.backgroundImage = `url(${url})`;
+    document.getElementById('afterSvg').style.display = 'none';
+    document.getElementById('beforeSvg').style.display = 'none';
+    document.getElementById('afterPhoto').style.display = 'block';
+    document.getElementById('beforePhoto').style.display = 'block';
+    document.getElementById('uploadHint').textContent = file.name;
+  });
+
+  /* ---------- VOICE ASSISTANT (Web Speech API) ---------- */
+  const micBtn = document.getElementById('micBtn');
+  const micStatus = document.getElementById('micStatus');
+  const catInput = document.getElementById('catInput');
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recog = null, listening = false;
+
+  function startVoice(){
+    if(!SR){
+      micStatus.textContent = 'Voice input is not supported in this browser — please type instead.';
+      return;
+    }
+    recog = new SR();
+    recog.lang = document.getElementById('voiceLang').value;
+    recog.interimResults = true;
+    recog.continuous = false;
+    let finalText = '';
+    recog.onstart = () => { listening = true; micBtn.classList.add('listening'); micStatus.textContent = 'Listening… speak now'; };
+    recog.onresult = e => {
+      let interim = '';
+      for(let i = e.resultIndex; i < e.results.length; i++){
+        const t = e.results[i][0].transcript;
+        if(e.results[i].isFinal) finalText += t + ' '; else interim += t;
+      }
+      catInput.value = (finalText + interim).trim();
+      micStatus.textContent = 'Transcribing…';
+    };
+    recog.onerror = ev => { micStatus.textContent = 'Could not hear that (' + ev.error + '). Try again or type.'; stopVoice(); };
+    recog.onend = () => {
+      stopVoice();
+      if(catInput.value.trim()){ micStatus.textContent = 'Transcript ready — generating listing…'; generateCatalog(); }
+      else micStatus.textContent = 'Tap the mic and describe your product';
+    };
+    recog.start();
+  }
+  function stopVoice(){ listening = false; micBtn.classList.remove('listening'); }
+  micBtn.addEventListener('click', () => {
+    if(listening && recog){ recog.stop(); return; }
+    startVoice();
+  });
+
+  function speak(text, lang){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang || 'en-IN';
+    u.rate = .96;
+    window.speechSynthesis.speak(u);
+  }
+  function speakListing(){
+    const t = document.getElementById('catTitle').textContent;
+    const d = document.getElementById('catDesc').textContent;
+    if(!t){ generateCatalog(); }
+    speak((document.getElementById('catTitle').textContent + '. ' + document.getElementById('catDesc').textContent), 'en-IN');
+  }
+
+  /* ---------- multilingual cataloger ---------- */
+  function generateCatalog(){
+    const raw = catInput.value.trim();
+    if(!raw) return;
+    const words = raw.split(',').map(w=>w.trim()).filter(Boolean);
+    const titleWords = words.slice(0,3).join(' ');
+    const title = titleWords.charAt(0).toUpperCase() + titleWords.slice(1);
+    const desc = `A ${raw.toLowerCase()}. Crafted using traditional techniques passed down through generations, finished by hand and ready to list across marketplaces in multiple languages.`;
+    const tags = [...new Set(words.concat(['handmade','artisan-made','India']))].slice(0,6);
+    document.getElementById('catTitle').textContent = title;
+    document.getElementById('catDesc').textContent = desc;
+    document.getElementById('catTags').innerHTML = tags.map(t=>`<span class="tag-chip">${t}</span>`).join('');
+    document.getElementById('catOutput').classList.add('show');
+  }
+
+  /* ---------- pricing ---------- */
+  function suggestPrice(){
+    const cost = parseFloat(document.getElementById('priceCost').value) || 0;
+    const hours = parseFloat(document.getElementById('priceHours').value) || 0;
+    const multiplier = parseFloat(document.getElementById('priceCategory').value);
+    const base = (cost + hours * 60) * multiplier;
+    const low = Math.round(base * 0.92 / 10) * 10;
+    const high = Math.round(base * 1.15 / 10) * 10;
+    document.getElementById('priceRange').textContent = `₹${low} – ₹${high}`;
+    document.getElementById('priceWhy').textContent = `Based on material cost, ${hours} hours of labour, and current demand for this craft category, this range keeps a healthy margin while staying competitive.`;
+    document.getElementById('priceOutput').classList.add('show');
+  }
+
+  /* ---------- buyer matching ---------- */
+  const buyerPool = [
+    {name:'Anokhi Retail Collective', cat:'Textiles', min:50, max:500, region:'Jaipur'},
+    {name:'Craftsbridge Exports', cat:'Textiles', min:100, max:1000, region:'Mumbai'},
+    {name:'Studio Mitti', cat:'Pottery', min:20, max:200, region:'Delhi'},
+    {name:'Terra & Co. Home', cat:'Pottery', min:80, max:600, region:'Bengaluru'},
+    {name:'Silverleaf Jewels', cat:'Jewellery', min:30, max:300, region:'Kolkata'},
+    {name:'Heritage Adornments', cat:'Jewellery', min:60, max:400, region:'Hyderabad'},
+  ];
+  function matchBuyers(){
+    const cat = document.getElementById('matchCategory').value;
+    const qty = parseFloat(document.getElementById('matchQty').value) || 0;
+    const results = buyerPool.filter(b => b.cat === cat).map(b => {
+      const fits = qty >= b.min && qty <= b.max;
+      return {...b, pct: fits ? 90 + Math.round(Math.random()*8) : 55 + Math.round(Math.random()*15)};
+    }).sort((a,b)=> b.pct - a.pct);
+    const out = document.getElementById('matchOutput');
+    out.innerHTML = results.map(b => `
+      <div class="buyer-card">
+        <div>
+          <div class="buyer-name">${b.name}</div>
+          <div class="buyer-meta">${b.region} · orders ${b.min}–${b.max} units · escrow terms</div>
+        </div>
+        <div class="match-pct">${b.pct}% match</div>
+      </div>`).join('');
+    out.classList.add('show');
+  }
+
+  /* ---------- AI CULTURAL STORY VIDEO ---------- */
+  const moodPalettes = {
+    heritage:[['#3a5a86','#1b2a4a'],['#a8471f','#7e3417'],['#5a5040','#22190f'],['#e3a008','#a83a2e']],
+    festive:[['#e3a008','#a83a2e'],['#a83a2e','#5d1f18'],['#e3a008','#3a5a86'],['#c9622f','#e3a008']],
+    minimal:[['#e7dcc4','#b9ae95'],['#8f9ab3','#3a5a86'],['#f1e9d8','#a89c82'],['#1b2a4a','#3a5a86']]
+  };
+  let scenes = [], reelTimer = null, currentScript = '';
+
+  function generateVideo(){
+    const craft = document.getElementById('storyCraft').value || 'this craft';
+    const region = document.getElementById('storyRegion').value || 'India';
+    const artisan = document.getElementById('storyArtisan').value || 'the artisan';
+    const mood = document.getElementById('storyMood').value;
+    const secs = parseInt(document.getElementById('storyLength').value, 10);
+    const note = document.getElementById('storyNote').value.trim();
+
+    const shotCount = secs <= 15 ? 3 : secs <= 30 ? 4 : 6;
+    const per = (secs / shotCount).toFixed(1);
+
+    const lines = [
+      `In the lanes of ${region}, the day begins before the sun.`,
+      `${artisan} has been shaping ${craft} since she was a girl.`,
+      note ? note.charAt(0).toUpperCase() + note.slice(1) + '.' : `Every piece takes days of patient, unhurried handwork.`,
+      `No two pieces are ever quite the same.`,
+      `Each one carries a technique older than any machine.`,
+      `Bring home a piece of ${region}'s living craft.`
+    ].slice(0, shotCount);
+
+    const shotTypes = ['Establishing wide of the village lane','Close-up on the artisan\'s hands at work','Macro detail of texture and dye','Slow pan across finished pieces','Portrait of the artisan, eyes to camera','Product hero shot with the story caption'];
+
+    scenes = lines.map((line, i) => ({
+      t: (i * per).toFixed(1),
+      shot: shotTypes[i % shotTypes.length],
+      line,
+      colors: moodPalettes[mood][i % moodPalettes[mood].length]
+    }));
+
+    currentScript = lines.join(' ');
+    document.getElementById('storyText').textContent = currentScript;
+    document.getElementById('storyTags').innerHTML = ['#' + craft.replace(/\s+/g,''), '#handmadeinindia', '#' + region.split(',')[0].replace(/\s+/g,''), '#slowcraft', '#kaarigarAI']
+      .map(t=>`<span class="tag-chip">${t}</span>`).join('');
+    document.getElementById('storyOutput').classList.add('show');
+
+    document.getElementById('shotList').innerHTML = scenes.map((s,i)=>`
+      <div class="shot">
+        <div class="t">${s.t}s</div>
+        <div><b>Shot ${i+1} — ${s.shot}</b><span>“${s.line}”</span></div>
+      </div>`).join('');
+    document.getElementById('storyboard').classList.add('show');
+
+    document.getElementById('reelFrame').innerHTML = scenes.map((s,i)=>`
+      <div class="reel-scene ${i===0?'active':''}" data-scene="${i}">
+        <div class="scene-art">
+          <svg viewBox="0 0 270 480" preserveAspectRatio="xMidYMid slice">
+            <defs><linearGradient id="g${i}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${s.colors[0]}"/><stop offset="100%" stop-color="${s.colors[1]}"/></linearGradient></defs>
+            <rect width="270" height="480" fill="url(#g${i})"/>
+            <circle cx="${60+i*34}" cy="${150+i*22}" r="${52+i*6}" fill="#f1e9d8" opacity=".12"/>
+            <path d="M0 ${330+i*10} Q135 ${270+i*12} 270 ${340+i*8} L270 480 L0 480 Z" fill="#000" opacity=".28"/>
+          </svg>
+        </div>
+        <p class="reel-kicker">SHOT ${i+1} · ${s.shot.toUpperCase()}</p>
+        <p class="reel-caption">${s.line}</p>
+      </div>`).join('');
+    document.getElementById('reelLabel').textContent = `9:16 · ${secs}s · ${shotCount} shots · ${mood}`;
+    playReel();
+  }
+
+  function playReel(){
+    if(!scenes.length){ generateVideo(); return; }
+    clearInterval(reelTimer);
+    const secs = parseInt(document.getElementById('storyLength').value, 10);
+    const frames = document.querySelectorAll('#reelFrame .reel-scene');
+    const bar = document.getElementById('reelProgress');
+    const timeEl = document.getElementById('reelTime');
+    let elapsed = 0;
+    const step = 0.1;
+    const per = secs / scenes.length;
+    narrateStory();
+    reelTimer = setInterval(() => {
+      elapsed += step;
+      const idx = Math.min(scenes.length - 1, Math.floor(elapsed / per));
+      frames.forEach((f,i)=> f.classList.toggle('active', i === idx));
+      bar.style.width = Math.min(100, (elapsed/secs)*100) + '%';
+      timeEl.textContent = elapsed.toFixed(0) + 's';
+      if(elapsed >= secs){ clearInterval(reelTimer); timeEl.textContent = secs + 's · done'; }
+    }, step * 1000);
+  }
+
+  function narrateStory(){
+    if(!currentScript) generateVideoScriptOnly();
+    speak(currentScript, document.getElementById('storyVoiceLang').value);
+  }
+  function generateVideoScriptOnly(){ generateVideo(); }
+
+  function downloadScript(){
+    if(!scenes.length) generateVideo();
+    const txt = 'KAARIGAR AI — CULTURAL STORY VIDEO\n\n' +
+      scenes.map((s,i)=>`${s.t}s | Shot ${i+1}: ${s.shot}\nVO: ${s.line}\n`).join('\n');
+    const blob = new Blob([txt], {type:'text/plain'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'kaarigar-story-script.txt';
+    a.click();
+  }
+
+  /* ---------- MARKETPLACE + CART ---------- */
+  const products = [
+    {name:'Blue Pottery Vase', region:'Jaipur, Rajasthan', seller:'Mohan Lal Kumhar', cat:'Pottery', price:1240, pop:9,
+     art:'<svg viewBox="0 0 60 60"><path d="M18 20h24l4 30H14z" fill="#f1e9d8" opacity=".9"/><ellipse cx="30" cy="20" rx="12" ry="4" fill="#e3a008"/></svg>'},
+    {name:'Bandhani Silk Stole', region:'Kutch, Gujarat', seller:'Lakshmi Ben Rabari', cat:'Textiles', price:980, pop:10,
+     art:'<svg viewBox="0 0 60 60"><rect x="12" y="14" width="36" height="34" rx="2" fill="#f1e9d8" opacity=".9"/><path d="M12 20h36M12 28h36M12 36h36" stroke="#a83a2e" stroke-width="2"/></svg>'},
+    {name:'Dhokra Metal Figurine', region:'Bastar, Chhattisgarh', seller:'Sukhram Ghadwa', cat:'Jewellery', price:1650, pop:7,
+     art:'<svg viewBox="0 0 60 60"><circle cx="30" cy="26" r="12" fill="none" stroke="#f1e9d8" stroke-width="3"/><rect x="27" y="36" width="6" height="14" fill="#f1e9d8"/></svg>'},
+    {name:'Terracotta Wall Panel', region:'Molela, Rajasthan', seller:'Dinesh Kumhar', cat:'Decor', price:2100, pop:8,
+     art:'<svg viewBox="0 0 60 60"><path d="M30 12l6 12h12l-10 8 4 14-12-8-12 8 4-14-10-8h12z" fill="#f1e9d8" opacity=".9"/></svg>'},
+    {name:'Kalamkari Cotton Runner', region:'Srikalahasti, AP', seller:'Padma Sree', cat:'Textiles', price:1450, pop:6,
+     art:'<svg viewBox="0 0 60 60"><rect x="10" y="18" width="40" height="26" rx="3" fill="#f1e9d8" opacity=".9"/><circle cx="24" cy="31" r="5" fill="#a83a2e"/><circle cx="38" cy="31" r="5" fill="#e3a008"/></svg>'},
+    {name:'Silver Filigree Earrings', region:'Cuttack, Odisha', seller:'Bijay Maharana', cat:'Jewellery', price:2450, pop:9,
+     art:'<svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="14" fill="none" stroke="#f1e9d8" stroke-width="2"/><circle cx="30" cy="30" r="6" fill="#e3a008"/></svg>'},
+    {name:'Channapatna Toy Set', region:'Channapatna, Karnataka', seller:'Ravi Shilpi', cat:'Decor', price:760, pop:8,
+     art:'<svg viewBox="0 0 60 60"><rect x="16" y="26" width="12" height="22" rx="6" fill="#f1e9d8"/><rect x="32" y="20" width="12" height="28" rx="6" fill="#e3a008"/></svg>'},
+    {name:'Longpi Black Pottery Bowl', region:'Ukhrul, Manipur', seller:'Chonpi Kasar', cat:'Pottery', price:1180, pop:5,
+     art:'<svg viewBox="0 0 60 60"><path d="M14 26h32l-5 20H19z" fill="#f1e9d8" opacity=".85"/><ellipse cx="30" cy="26" rx="16" ry="5" fill="#a83a2e"/></svg>'}
+  ];
+  let cart = [];
+
+  function renderMarket(){
+    const cat = document.getElementById('filterCat').value;
+    const sort = document.getElementById('filterSort').value;
+    const q = document.getElementById('filterQ').value.trim().toLowerCase();
+    let list = products.filter(p => (cat === 'all' || p.cat === cat) &&
+      (!q || (p.name + p.region + p.seller + p.cat).toLowerCase().includes(q)));
+    if(sort === 'low') list.sort((a,b)=>a.price-b.price);
+    else if(sort === 'high') list.sort((a,b)=>b.price-a.price);
+    else list.sort((a,b)=>b.pop-a.pop);
+
+    document.getElementById('marketGrid').innerHTML = list.length ? list.map((p,i) => `
+      <div class="product-card">
+        <div class="product-thumb">${p.art}</div>
+        <div class="product-info">
+          <p class="p-name">${p.name}</p>
+          <p class="p-region">${p.region}</p>
+          <p class="p-seller">Seller: ${p.seller} ✓</p>
+          <p class="p-price">₹${p.price.toLocaleString('en-IN')}</p>
+          <button class="btn btn-primary btn-small" onclick="addToCart('${p.name.replace(/'/g,"")}',${p.price})">Buy now</button>
+          <button class="btn btn-ghost btn-small" style="margin-top:8px;" onclick="requestQuote('${p.seller.replace(/'/g,"")}')">Request bulk quote</button>
+        </div>
+      </div>`).join('') : '<p style="grid-column:1/-1;text-align:center;color:var(--ink-600);">No crafts match that search.</p>';
+  }
+
+  function addToCart(name, price){
+    cart.push({name, price});
+    const total = cart.reduce((s,i)=>s+i.price,0);
+    document.getElementById('cartText').textContent = `${cart.length} item${cart.length>1?'s':''} in cart — latest: ${name}`;
+    document.getElementById('cartTotal').textContent = '₹' + total.toLocaleString('en-IN');
+    document.getElementById('cartBar').classList.add('show');
+  }
+  function requestQuote(seller){
+    alert(`Bulk quote request sent to ${seller}.\n\nThe artisan receives it as a voice message in their own language. You'll get a reply with price, lead time and sample options.`);
+  }
+  function checkout(){
+    const total = cart.reduce((s,i)=>s+i.price,0);
+    alert(`Order placed — ₹${total.toLocaleString('en-IN')} held in escrow.\n\nThe artisan ships within the stated lead time. Payment releases to their UPI once you confirm delivery.`);
+    cart = [];
+    document.getElementById('cartBar').classList.remove('show');
+  }
+
+  renderMarket();
+</script>
+
+</body>
+</html>
